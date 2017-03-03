@@ -3,7 +3,7 @@ module Main where
 import Prelude (bind, pure, (<$>))
 import Control.Monad.Eff (Eff)
 import Pux (App, CoreEffects, start, renderToDOM, fromSimple)
-import Pux.Html (Html, Attribute, div, text)
+import Pux.Html (Html, Attribute, h3, div, text)
 import Pux.Html.Attributes (attr)
 -- import Pux.Html.Events (handler)
 import Pux.Devtool as Pux.Devtool
@@ -22,12 +22,10 @@ type AppEffects = ()
 
 
 update :: forall e. Action e -> State -> State
-update (SetNotes eventArgs) state = state { notes = notes', source = source' }
+update (SetNotes eventArgs) state = state { notes = notes' }
   where
     notes' :: Maybe String
     notes' = unsafeCoerce <$> (eventArgs !! 0)
-    source' :: Maybe String
-    source' = unsafeCoerce <$> (eventArgs !! 1)
 
 
 evt :: forall event action. String -> (Array event -> action) -> Attribute action
@@ -37,8 +35,10 @@ evt eventName = runFn2 Editor.changeHandler eventName
 view :: forall e. State -> Html (Action e)
 view state =
   div []
-    [ Editor.fromReact [ evt "onChange" SetNotes
+    [ h3 [] [ text "A React component (react-quill)" ]
+    , Editor.fromReact [ evt "onChange" SetNotes
                        , attr "defaultValue" (fromMaybe "" state.notes) ] []
+    , h3 [] [ text "Contents of the editor" ]
     , div [] [ text (fromMaybe "" state.notes) ]
     ]
 
