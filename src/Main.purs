@@ -5,7 +5,6 @@ import Control.Monad.Eff (Eff)
 import Pux (App, CoreEffects, start, renderToDOM, fromSimple)
 import Pux.Html (Html, Attribute, h3, div, text)
 import Pux.Html.Attributes (attr)
--- import Pux.Html.Events (handler)
 import Pux.Devtool as Pux.Devtool
 import Data.Function.Uncurried (runFn2)
 import Unsafe.Coerce (unsafeCoerce)
@@ -17,8 +16,6 @@ import Editor as Editor
 
 data Action eventArg
   = SetNotes (Array eventArg)
-
-type AppEffects = ()
 
 
 update :: forall e. Action e -> State -> State
